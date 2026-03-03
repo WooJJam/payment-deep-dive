@@ -42,3 +42,7 @@ bin/
 ### Docs ###
 PRD.md
 REQUIREMENTS.md
+
+### Secret ###
+**/application-*.yml
+.env

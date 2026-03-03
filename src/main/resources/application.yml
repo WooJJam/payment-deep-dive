@@ -1,0 +1,29 @@
+spring:
+  profiles:
+    default: local
+  datasource:
+    url: ${SPRING_DATASOURCE_URL}
+    username: ${SPRING_DATASOURCE_USERNAME}
+    password: ${SPRING_DATASOURCE_PASSWORD}
+    driver-class-name: com.mysql.cj.jdbc.Driver
+
+  thymeleaf:
+    prefix: classpath:/templates/
+    suffix: .html
+    cache: false
+
+  jpa:
+    hibernate:
+      ddl-auto: update
+    show-sql: false
+    properties:
+      hibernate:
+        format_sql: false
+
+payments:
+  secret:
+    key: ${TOSS_PAYMENTS_SECRET_KEY:toss_payments_secret_key}
+  client:
+    key: ${TOSS_PAYMENTS_CLIENT_KEY:toss_payments_client_key}
+  security:
+    key: ${TOSS_PAYMENTS_SECURITY_KEY:toss_payments_security_key}
