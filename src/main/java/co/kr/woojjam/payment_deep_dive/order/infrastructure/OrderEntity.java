@@ -1,6 +1,5 @@
 package co.kr.woojjam.payment_deep_dive.order.infrastructure;
 
-import java.time.LocalDate;
 import java.time.LocalDateTime;
 
 import co.kr.woojjam.payment_deep_dive.global.common.BaseEntity;

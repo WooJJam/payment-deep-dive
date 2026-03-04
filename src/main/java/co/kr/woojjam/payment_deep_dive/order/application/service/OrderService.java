@@ -29,9 +29,10 @@ public class OrderService {
 		String orderName = buildOrderName(items);
 		long totalAmount = calculateTotalAmount(items);
 
-		Order order = Order.of(orderId, totalAmount);
+		Order order = Order.of(orderId, totalAmount, items);
 		OrderEntity entity = orderDomainService.save(order);
-		log.info("주문 정보가 저장되었습니다. orderId = {}", entity.getOrderId());
+		orderDomainService.saveItems(order);
+		log.info("주문 정보가 저장되었습니다. orderId = {}, itemCount = {}", entity.getOrderId(), items.size());
 
 		return new OrderResponse(orderId, orderName, totalAmount);
 	}
@@ -55,7 +56,7 @@ public class OrderService {
 	}
 
 	private long calculateTotalAmount(List<OrderItem> items) {
-		return items.stream().mapToLong(OrderItem::price).sum();
+		return items.stream().mapToLong(item -> item.price() * item.amount()).sum();
 	}
 
 	private void validateAmount(long expected, Long actual) {

@@ -1,5 +1,6 @@
 package co.kr.woojjam.payment_deep_dive.order.infrastructure;
 
+import java.util.List;
 import java.util.Optional;
 
 import org.springframework.stereotype.Service;
@@ -14,11 +15,18 @@ import lombok.RequiredArgsConstructor;
 public class OrderDomainService {
 
 	private final OrderRepository orderRepository;
+	private final OrderItemRepository orderItemRepository;
 
 	@Transactional
 	public OrderEntity save(final Order order) {
 		OrderEntity entity = OrderMapping.toEntity(order);
 		return orderRepository.save(entity);
+	}
+
+	@Transactional
+	public void saveItems(final Order order) {
+		List<OrderItemEntity> items = OrderMapping.toItemEntities(order);
+		orderItemRepository.saveAll(items);
 	}
 
 	@Transactional
