@@ -25,5 +25,3 @@ payments:
     key: ${TOSS_PAYMENTS_SECRET_KEY:toss_payments_secret_key}
   client:
     key: ${TOSS_PAYMENTS_CLIENT_KEY:toss_payments_client_key}
-  security:
-    key: ${TOSS_PAYMENTS_SECURITY_KEY:toss_payments_security_key}

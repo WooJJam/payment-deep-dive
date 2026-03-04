@@ -1,0 +1,142 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <title>결제하기</title>
+    <style>
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+        body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif; background: #f9f9f9; }
+        .container { max-width: 540px; margin: 40px auto; padding: 0 16px; }
+        h1 { font-size: 20px; font-weight: 700; margin-bottom: 24px; }
+        .order-summary {
+            background: #fff;
+            border: 1px solid #e8e8e8;
+            border-radius: 12px;
+            padding: 20px;
+            margin-bottom: 16px;
+        }
+        .order-summary h2 { font-size: 14px; color: #888; margin-bottom: 12px; }
+        .order-item {
+            display: flex;
+            justify-content: space-between;
+            font-size: 15px;
+            padding: 8px 0;
+            border-bottom: 1px solid #f0f0f0;
+        }
+        .order-item:last-child { border-bottom: none; }
+        .order-total {
+            display: flex;
+            justify-content: space-between;
+            font-size: 16px;
+            font-weight: 700;
+            margin-top: 12px;
+        }
+        .pay-button {
+            width: 100%;
+            padding: 16px;
+            background: #3182f6;
+            color: #fff;
+            border: none;
+            border-radius: 10px;
+            font-size: 16px;
+            font-weight: 600;
+            cursor: pointer;
+        }
+        .pay-button:hover { background: #1b64da; }
+        .pay-button:disabled { background: #aaa; cursor: not-allowed; }
+    </style>
+</head>
+<body>
+<div class="container">
+    <h1>주문/결제</h1>
+
+    <div class="order-summary">
+        <h2>주문 정보</h2>
+        <div class="order-item" th:each="item : ${checkout.items}">
+            <span th:text="${item.name}"></span>
+            <span th:text="${#numbers.formatInteger(item.price, 0, 'COMMA') + '원'}"></span>
+        </div>
+        <div class="order-total">
+            <span>총 결제 금액</span>
+            <span th:text="${#numbers.formatInteger(checkout.totalAmount, 0, 'COMMA') + '원'}"></span>
+        </div>
+    </div>
+
+    <button class="pay-button" id="pay-button">결제하기</button>
+</div>
+
+<!-- 토스페이먼츠 JS SDK v2 -->
+<script src="https://js.tosspayments.com/v2/standard"></script>
+<script th:inline="javascript">
+    const clientKey = /*[[${clientKey}]]*/ '';
+    const ORDER_ID = /*[[${checkout.orderId}]]*/ '';
+    const ORDER_AMOUNT = /*[[${checkout.totalAmount}]]*/ 0;
+    const ORDER_NAME   = /*[[${checkout.orderName}]]*/ '';
+    const CUSTOMER_EMAIL  = /*[[${checkout.customerEmail}]]*/ '';
+    const CUSTOMER_NAME   = /*[[${checkout.customerName}]]*/ '';
+    const CUSTOMER_PHONE  = /*[[${checkout.customerMobilePhone}]]*/ '';
+    async function main() {
+        const payButton = document.getElementById('pay-button');
+        if (!clientKey) {
+            console.error('clientKey가 비어 있습니다.');
+            alert('결제 설정(clientKey)을 확인해 주세요.');
+            payButton.disabled = true;
+            return;
+        }
+
+        if (!ORDER_AMOUNT || ORDER_AMOUNT <= 0) {
+            console.error('ORDER_AMOUNT가 올바르지 않습니다:', ORDER_AMOUNT);
+            alert('결제 금액을 확인해 주세요.');
+            payButton.disabled = true;
+            return;
+        }
+        if (!ORDER_ID) {
+            console.error('ORDER_ID가 비어 있습니다.');
+            alert('주문번호 생성에 실패했습니다. 페이지를 새로고침해 주세요.');
+            payButton.disabled = true;
+            return;
+        }
+
+        const tossPayments = TossPayments(clientKey);
+        const payment = tossPayments.payment({ customerKey: generateCustomerKey() });
+
+        payButton.addEventListener('click', async () => {
+            payButton.disabled = true;
+
+            try {
+                await payment.requestPayment({
+                    method: 'CARD',
+                    amount: {
+                        currency: 'KRW',
+                        value: ORDER_AMOUNT,
+                    },
+                    orderId: ORDER_ID,
+                    orderName: ORDER_NAME,
+                    successUrl: window.location.origin + '/success',
+                    failUrl: window.location.origin + '/fail',
+                    customerEmail: CUSTOMER_EMAIL,
+                    customerName: CUSTOMER_NAME,
+                    customerMobilePhone: CUSTOMER_PHONE,
+                });
+            } catch (error) {
+                payButton.disabled = false;
+                console.error('결제 요청 오류:', error);
+                alert(error.message || '결제 요청에 실패했습니다.');
+            }
+        });
+    }
+
+    function generateCustomerKey() {
+        if (window.crypto && typeof window.crypto.randomUUID === 'function') {
+            return `CUST_${window.crypto.randomUUID()}`;
+        }
+        return 'CUST_' + Date.now() + '_' + Math.random().toString(36).slice(2, 11);
+    }
+
+    main().catch((error) => {
+        console.error('결제창 초기화 오류:', error);
+        alert(error.message || '결제창 초기화에 실패했습니다.');
+    });
+</script>
+</body>
+</html>
