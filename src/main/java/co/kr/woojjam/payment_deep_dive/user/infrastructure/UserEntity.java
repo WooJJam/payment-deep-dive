@@ -1,6 +1,6 @@
-package co.kr.woojjam.payment_deep_dive.user;
+package co.kr.woojjam.payment_deep_dive.user.infrastructure;
 
-import co.kr.woojjam.payment_deep_dive.common.BaseEntity;
+import co.kr.woojjam.payment_deep_dive.global.common.BaseEntity;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;

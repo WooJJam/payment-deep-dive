@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <title>결제 실패</title>
+    <style>
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+        body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif; background: #f9f9f9; }
+        .container { max-width: 540px; margin: 80px auto; padding: 0 16px; text-align: center; }
+        .icon { font-size: 64px; margin-bottom: 24px; }
+        h1 { font-size: 24px; font-weight: 700; color: #f04452; margin-bottom: 8px; }
+        .subtitle { font-size: 14px; color: #888; margin-bottom: 32px; }
+        .info-card {
+            background: #fff;
+            border: 1px solid #e8e8e8;
+            border-radius: 12px;
+            padding: 24px;
+            text-align: left;
+            margin-bottom: 24px;
+        }
+        .info-row {
+            display: flex;
+            justify-content: space-between;
+            padding: 10px 0;
+            border-bottom: 1px solid #f0f0f0;
+            font-size: 14px;
+        }
+        .info-row:last-child { border-bottom: none; }
+        .info-row .label { color: #888; }
+        .info-row .value { font-weight: 600; word-break: break-all; max-width: 70%; text-align: right; }
+        .error-code { color: #f04452; }
+        .back-button {
+            display: inline-block;
+            padding: 14px 32px;
+            background: #3182f6;
+            color: #fff;
+            border-radius: 10px;
+            font-size: 15px;
+            font-weight: 600;
+            text-decoration: none;
+        }
+        .back-button:hover { background: #1b64da; }
+    </style>
+</head>
+<body>
+<div class="container">
+    <div class="icon">❌</div>
+    <h1>결제 실패</h1>
+    <p class="subtitle">결제 처리 중 문제가 발생했습니다.</p>
+
+    <div class="info-card">
+        <div class="info-row" th:if="${orderId}">
+            <span class="label">주문 ID</span>
+            <span class="value" th:text="${orderId}"></span>
+        </div>
+        <div class="info-row">
+            <span class="label">오류 코드</span>
+            <span class="value error-code" th:text="${code}"></span>
+        </div>
+        <div class="info-row">
+            <span class="label">오류 메시지</span>
+            <span class="value" th:text="${message}"></span>
+        </div>
+    </div>
+
+    <a href="/checkout" class="back-button">다시 결제하기</a>
+</div>
+</body>
+</html>

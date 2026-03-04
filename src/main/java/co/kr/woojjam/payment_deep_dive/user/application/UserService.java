@@ -1,8 +1,9 @@
-package co.kr.woojjam.payment_deep_dive.user;
+package co.kr.woojjam.payment_deep_dive.user.application;
 
 import org.springframework.stereotype.Service;
 
-import ch.qos.logback.classic.spi.IThrowableProxy;
+import co.kr.woojjam.payment_deep_dive.user.infrastructure.UserDomainService;
+import co.kr.woojjam.payment_deep_dive.user.infrastructure.UserEntity;
 import lombok.RequiredArgsConstructor;
 
 @Service

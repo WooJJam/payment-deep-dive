@@ -1,4 +1,4 @@
-package co.kr.woojjam.payment_deep_dive.user;
+package co.kr.woojjam.payment_deep_dive.user.infrastructure;
 
 import java.util.Optional;
 
