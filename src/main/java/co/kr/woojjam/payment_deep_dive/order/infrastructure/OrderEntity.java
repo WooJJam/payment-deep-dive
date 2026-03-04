@@ -3,8 +3,11 @@ package co.kr.woojjam.payment_deep_dive.order.infrastructure;
 import java.time.LocalDateTime;
 
 import co.kr.woojjam.payment_deep_dive.global.common.BaseEntity;
+import co.kr.woojjam.payment_deep_dive.order.type.OrderStatus;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
+import jakarta.persistence.EnumType;
+import jakarta.persistence.Enumerated;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
@@ -28,7 +31,8 @@ public class OrderEntity extends BaseEntity {
 	private String name;
 	@Column(nullable = false)
 	private long amount;
-	private String status;
+	@Enumerated(EnumType.STRING)
+	private OrderStatus status;
 	private String method;
 	private LocalDateTime approvedAt;
 	private String failCode;
@@ -39,7 +43,7 @@ public class OrderEntity extends BaseEntity {
 		final long amount,
 		final LocalDateTime approvedAt, final String failCode,
 		final String failMessage, final Long id, final String method,
-		final String name, final String orderId, final String paymentId, final String status) {
+		final String name, final String orderId, final String paymentId, final OrderStatus status) {
 		this.amount = amount;
 		this.approvedAt = approvedAt;
 		this.failCode = failCode;

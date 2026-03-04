@@ -12,6 +12,7 @@ public class OrderMapping {
 		return OrderEntity.builder()
 			.orderId(order.orderId())
 			.amount(order.amount())
+			.status(order.status())
 			.build();
 	}
 

@@ -13,6 +13,7 @@ import co.kr.woojjam.payment_deep_dive.order.exception.AmountMismatchException;
 import co.kr.woojjam.payment_deep_dive.order.exception.InvalidOrderException;
 import co.kr.woojjam.payment_deep_dive.order.infrastructure.OrderDomainService;
 import co.kr.woojjam.payment_deep_dive.order.infrastructure.OrderEntity;
+import co.kr.woojjam.payment_deep_dive.order.type.OrderStatus;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 
@@ -29,7 +30,7 @@ public class OrderService {
 		String orderName = buildOrderName(items);
 		long totalAmount = calculateTotalAmount(items);
 
-		Order order = Order.of(orderId, totalAmount, items);
+		Order order = Order.of(orderId, totalAmount, OrderStatus.PENDING, items);
 		OrderEntity entity = orderDomainService.save(order);
 		orderDomainService.saveItems(order);
 		log.info("주문 정보가 저장되었습니다. orderId = {}, itemCount = {}", entity.getOrderId(), items.size());
