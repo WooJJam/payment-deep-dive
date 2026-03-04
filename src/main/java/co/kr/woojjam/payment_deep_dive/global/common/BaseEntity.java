@@ -1,4 +1,4 @@
-package co.kr.woojjam.payment_deep_dive.common;
+package co.kr.woojjam.payment_deep_dive.global.common;
 
 import java.time.LocalDateTime;
 
