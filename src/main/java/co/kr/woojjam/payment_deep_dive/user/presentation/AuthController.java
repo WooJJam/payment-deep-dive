@@ -7,6 +7,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 
+import co.kr.woojjam.payment_deep_dive.global.auth.Auth;
 import co.kr.woojjam.payment_deep_dive.global.common.response.ApiResponse;
 import co.kr.woojjam.payment_deep_dive.user.application.AuthService;
 import co.kr.woojjam.payment_deep_dive.user.presentation.request.LoginRequest;
@@ -36,11 +37,13 @@ public class AuthController {
 	}
 
 	@PostMapping("/refresh")
+	@Auth
 	public ApiResponse<TokenResponse> refresh(@RequestBody @Valid RefreshTokenRequest request) {
 		return ApiResponse.ok(authService.refresh(request.refreshToken()));
 	}
 
 	@PostMapping("/logout")
+	@Auth
 	public ApiResponse<Void> logout(@RequestBody @Valid RefreshTokenRequest request) {
 		authService.logout(request.refreshToken());
 		return ApiResponse.ok();
