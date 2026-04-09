@@ -1,9 +1,11 @@
-package co.kr.woojjam.payment_deep_dive.user.infrastructure;
+package co.kr.woojjam.payment_deep_dive.user.application;
 
 import java.util.Optional;
 
 import org.springframework.stereotype.Service;
 
+import co.kr.woojjam.payment_deep_dive.user.infrastructure.UserEntity;
+import co.kr.woojjam.payment_deep_dive.user.infrastructure.UserRepository;
 import lombok.RequiredArgsConstructor;
 
 @Service
