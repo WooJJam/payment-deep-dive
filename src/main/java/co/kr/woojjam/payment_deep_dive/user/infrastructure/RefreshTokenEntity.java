@@ -1,6 +1,8 @@
 package co.kr.woojjam.payment_deep_dive.user.infrastructure;
 
-import co.kr.woojjam.payment_deep_dive.global.common.BaseEntity;
+import java.time.LocalDateTime;
+
+import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
@@ -13,21 +15,22 @@ import lombok.NoArgsConstructor;
 @Entity
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
-public class UserEntity extends BaseEntity {
+public class RefreshTokenEntity {
 
 	@Id @GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long id;
-	private String email;
-	private String password;
-	private String name;
-	private String phoneNumber;
+
+	private Long userId;
+
+	@Column(nullable = false, unique = true, length = 512)
+	private String token;
+
+	private LocalDateTime expiresAt;
 
 	@Builder
-	public UserEntity(final Long id, final String email, final String password, final String name, final String phoneNumber) {
-		this.id = id;
-		this.email = email;
-		this.password = password;
-		this.name = name;
-		this.phoneNumber = phoneNumber;
+	public RefreshTokenEntity(final Long userId, final String token, final LocalDateTime expiresAt) {
+		this.userId = userId;
+		this.token = token;
+		this.expiresAt = expiresAt;
 	}
 }

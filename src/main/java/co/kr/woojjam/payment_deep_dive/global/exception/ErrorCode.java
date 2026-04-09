@@ -25,6 +25,9 @@ public enum ErrorCode {
     // User
     USER_NOT_FOUND(NOT_FOUND, "U-001", "존재하지 않는 사용자입니다."),
     EMAIL_DUPLICATED(CONFLICT, "U-002", "이미 사용 중인 이메일입니다."),
+    INVALID_PASSWORD(UNAUTHORIZED, "U-003", "비밀번호가 올바르지 않습니다."),
+    INVALID_TOKEN(UNAUTHORIZED, "U-004", "유효하지 않은 토큰입니다."),
+    TOKEN_NOT_FOUND(UNAUTHORIZED, "U-005", "토큰이 존재하지 않습니다."),
 
     // Match
     MATCH_NOT_FOUND(NOT_FOUND, "M-001", "존재하지 않는 매치입니다."),
