@@ -1,16 +1,13 @@
 package co.kr.woojjam.payment_deep_dive.order.presentation.web;
 
-import java.util.List;
-
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
+import co.kr.woojjam.payment_deep_dive.global.exception.BusinessException;
 import co.kr.woojjam.payment_deep_dive.order.application.facade.OrderPaymentFacade;
-import co.kr.woojjam.payment_deep_dive.order.exception.AmountMismatchException;
-import co.kr.woojjam.payment_deep_dive.order.exception.InvalidOrderException;
 import co.kr.woojjam.payment_deep_dive.order.presentation.request.CheckoutRequest;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -43,10 +40,8 @@ public class CheckoutController {
 	) {
 		try {
 			orderPaymentFacade.validatePayment(orderId, amount);
-		} catch (InvalidOrderException e) {
-			return failWith(model, "INVALID_ORDER_ID", e.getMessage(), orderId);
-		} catch (AmountMismatchException e) {
-			return failWith(model, "AMOUNT_MISMATCH", e.getMessage(), orderId);
+		} catch (BusinessException e) {
+			return failWith(model, e.getErrorCode().getCode(), e.getMessage(), orderId);
 		}
 
 		log.info("결제 검증이 완료되었습니다.");
@@ -72,7 +67,7 @@ public class CheckoutController {
 	}
 
 	private String failWith(final Model model, final String code, final String message, final String orderId) {
-		log.info("결제 검증에 실패하였습니다.");
+		log.info("결제 검증에 실패하였습니다. code={}", code);
 		model.addAttribute("code", code);
 		model.addAttribute("message", message);
 		model.addAttribute("orderId", orderId);

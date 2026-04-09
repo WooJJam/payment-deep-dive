@@ -6,13 +6,13 @@ import java.util.UUID;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import co.kr.woojjam.payment_deep_dive.global.exception.ErrorCode;
 import co.kr.woojjam.payment_deep_dive.order.domain.Order;
 import co.kr.woojjam.payment_deep_dive.order.domain.OrderResponse;
-import co.kr.woojjam.payment_deep_dive.order.presentation.web.OrderItem;
-import co.kr.woojjam.payment_deep_dive.order.exception.AmountMismatchException;
-import co.kr.woojjam.payment_deep_dive.order.exception.InvalidOrderException;
+import co.kr.woojjam.payment_deep_dive.order.exception.OrderException;
 import co.kr.woojjam.payment_deep_dive.order.infrastructure.OrderDomainService;
 import co.kr.woojjam.payment_deep_dive.order.infrastructure.OrderEntity;
+import co.kr.woojjam.payment_deep_dive.order.presentation.web.OrderItem;
 import co.kr.woojjam.payment_deep_dive.order.type.OrderStatus;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -40,7 +40,7 @@ public class OrderService {
 
 	public void validateAndConsume(final String orderId, final Long amount) {
 		OrderEntity orderEntity = orderDomainService.findByOrderId(orderId)
-			.orElseThrow(InvalidOrderException::new);
+			.orElseThrow(() -> new OrderException(ErrorCode.INVALID_ORDER));
 
 		orderDomainService.deleteByOderId(orderId);
 
@@ -62,7 +62,7 @@ public class OrderService {
 
 	private void validateAmount(long expected, Long actual) {
 		if (expected != actual) {
-			throw new AmountMismatchException();
+			throw new OrderException(ErrorCode.AMOUNT_MISMATCH);
 		}
 	}
 }

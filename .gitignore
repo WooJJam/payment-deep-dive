@@ -40,9 +40,12 @@ bin/
 .DS_Store
 
 ### Docs ###
-PRD.md
+docs/PRD.md
 REQUIREMENTS.md
 
 ### Secret ###
 **/application-*.yml
 .env
+.claude/
+docs/
+claude.md
